@@ -27,7 +27,7 @@ class ViewController: UIViewController {
         header.center = CGPoint(x: center.x, y: 100);
         self.view.addSubview(header)
         
-        let bodyText = "Here's a riddle\n\nWhat get's bigger the more you take away from it?";
+        let bodyText = "Here's a riddle\n\nWhat gets bigger the more you take away from it?";
         let body = addNewLabel(text: bodyText,color: MICROSOFT_ORANGE,size: 20);
         body.center = CGPoint(x: center.x, y: center.y);
         self.view.addSubview(body);
