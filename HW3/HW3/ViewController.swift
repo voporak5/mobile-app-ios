@@ -10,12 +10,13 @@ import UIKit
 class ViewController: UIViewController {
 
     let CORNFLOWER_BLUE     =   UIColor(red: 100/255,green: 149/255,blue: 237/255,alpha:1);
-    
+    var stack: [Character] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         let center = self.view.center;
+        
         let display = addNewLabel(text:"0",color: CORNFLOWER_BLUE,size: 50)
         display.center = CGPoint(x: center.x, y: 150);
         self.view.addSubview(display)
@@ -32,8 +33,8 @@ class ViewController: UIViewController {
                 
                 button.center = CGPoint(x: x, y: y);
                 
-                let numberPressAction = getNumberPressAction(val: n)
-                button.addAction(numberPressAction, for: UIControl.Event.touchDown)
+                let buttonPressAction = getButtonPressAction(val: String(n), label: display)
+                button.addAction(buttonPressAction, for: UIControl.Event.touchDown)
                 
                 self.view.addSubview(button)
             }
@@ -41,19 +42,19 @@ class ViewController: UIViewController {
         
         let btnAdd = addButton(label: "+")
         btnAdd.center = CGPoint(x: center.x-100, y: center.y + 150);
-        let addPressAction = getAddPressAction()
+        let addPressAction = getButtonPressAction(val:"+",label: display)
         btnAdd.addAction(addPressAction, for: UIControl.Event.touchDown)
         self.view.addSubview(btnAdd)
         
         let button = addButton(label: "0")
         button.center = CGPoint(x: center.x, y: center.y + 150);
-        let numberPressAction = getNumberPressAction(val: 0)
+        let numberPressAction = getButtonPressAction(val:"0",label: display)
         button.addAction(numberPressAction, for: UIControl.Event.touchDown)
         self.view.addSubview(button)
         
         let btnEval = addButton(label: "=")
         btnEval.center = CGPoint(x: center.x+100, y: center.y + 150);
-        let evaluatePressAction = getEvaluatePressAction()
+        let evaluatePressAction = getButtonPressAction(val:"=",label: display)
         btnEval.addAction(evaluatePressAction, for: UIControl.Event.touchDown)
         self.view.addSubview(btnEval)
     }
@@ -66,32 +67,56 @@ class ViewController: UIViewController {
         return button;
     }
     
-    func getNumberPressAction(val: Int) -> UIAction {
+    func getButtonPressAction(val: String, label: UILabel) -> UIAction {
         
-        let numberPressAction = UIAction(title: String(val)) { (action) in
-            print(val)
+        let numberPressAction = UIAction() { (action) in
+            if(val == "=") {
+                self.compute(label: label)
+            }
+            else {
+                self.storeInputAndUpdateDisplay(val: Character(val),label: label)
+            }
         }
                 
         return numberPressAction
     }
     
-    func getAddPressAction() -> UIAction {
+    func compute(label: UILabel) {
         
-        let addPressAction = UIAction(title: "Add") { (action) in
-            print("add")
+        var input : String = "";
+        var result : Int = 0;
+        
+        for char in stack.reversed() {
+            
+            if(char == "+") {
+                result += Int(input) ?? 0
+                input = ""
+            }
+            else {
+                input.insert(char, at: input.startIndex)
+            }
+    
         }
-                
-        return addPressAction
+        
+        //Since there won't be a + at the very beginning
+        //we will need to force addition here
+        result += Int(input) ?? 0
+        
+        let input_str = String(result)
+        label.text = ""
+        stack = []
+        
+        for char in input_str {
+            self.storeInputAndUpdateDisplay(val: char, label: label)
+        }
     }
     
-    func getEvaluatePressAction() -> UIAction {
-        
-        let evaluatePressAction = UIAction(title: "Evaluate") { (action) in
-            print("evaluate")
-        }
-                
-        return evaluatePressAction
+    func storeInputAndUpdateDisplay(val: Character, label: UILabel){
+        stack.append(val)
+        label.text?.append(val)
     }
+    
+    
     
     func addNewLabel(text: String,color: UIColor,size: CGFloat) -> UILabel {
         let label = UILabel(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width - 100, height: 200))
