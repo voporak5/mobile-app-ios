@@ -1,5 +1,5 @@
 //
-//  RemoveViewController.swift
+//  RemoteViewController.swift
 //  HW4
 //
 //  Created by Bluestreet Mac on 1/28/23.
@@ -11,13 +11,17 @@ class RemoteViewController: UIViewController {
 
     let RED     =   UIColor(red: 100/255,green: 100/255,blue: 0/255,alpha:1);
     let WHITE     =   UIColor(red: 255/255,green: 255/255,blue: 255/255,alpha:1);
-    
-    var firstDigit = ""
+    let CORNFLOWER_BLUE     =   UIColor(red: 100/255,green: 149/255,blue: 237/255,alpha:1);
     
     let headerLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 50))
     let powerLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 50))
     let volumeLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 50))
     let channelLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 50))
+    let favoriteLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 50))
+    let segment = UISegmentedControl(items: ["ABC","NBC","CBS","FOX"])
+    
+    var firstDigit = ""
+    var elements : [UIControl] = []
     
     var channelSetAction: (Int) -> () = { (val:Int) in print(val) }
     var channelIncrementAction: () -> () = { print("Channel Increment") }
@@ -38,7 +42,7 @@ class RemoteViewController: UIViewController {
         headerLabel.topAnchor.constraint(equalTo: view.topAnchor,constant: 10).isActive = true
         headerLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         
-        setLabel(label:powerLabel,text:"Power:",color: WHITE,size: 20)
+        setLabel(label:powerLabel,text:"Power",color: WHITE,size: 20)
         self.view.addSubview(powerLabel)
         powerLabel.translatesAutoresizingMaskIntoConstraints = false
         powerLabel.topAnchor.constraint(equalTo: view.topAnchor,constant: 50).isActive = true
@@ -46,7 +50,7 @@ class RemoteViewController: UIViewController {
         
         
         
-        setLabel(label:volumeLabel,text:"Volume:",color: WHITE,size: 20)
+        setLabel(label:volumeLabel,text:"Volume",color: WHITE,size: 20)
         self.view.addSubview(volumeLabel)
         volumeLabel.translatesAutoresizingMaskIntoConstraints = false
         volumeLabel.topAnchor.constraint(equalTo: view.topAnchor,constant: 100).isActive = true
@@ -54,14 +58,143 @@ class RemoteViewController: UIViewController {
         
         
         
-        setLabel(label:channelLabel,text:"Channel:",color: WHITE,size: 20)
+        setLabel(label:channelLabel,text:"Channel",color: WHITE,size: 20)
         self.view.addSubview(channelLabel)
         channelLabel.translatesAutoresizingMaskIntoConstraints = false
         channelLabel.topAnchor.constraint(equalTo: view.topAnchor,constant: 150).isActive = true
         channelLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
+        
+        setLabel(label:favoriteLabel,text:"Favorite\nChannel",color: WHITE,size: 20)
+        self.view.addSubview(favoriteLabel)
+        favoriteLabel.translatesAutoresizingMaskIntoConstraints = false
+        favoriteLabel.topAnchor.constraint(equalTo: view.topAnchor,constant: 300).isActive = true
+        favoriteLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
+        
+        
+        
+        addPowerButton()
+        
+        addSlider()
+        
+        addChannelButton(digit: "0",yOffset: 150,xOffset: -50)
+        addChannelButton(digit: "1",yOffset: 150,xOffset: 0)
+        addChannelButton(digit: "2",yOffset: 150,xOffset: 50)
+        addChannelButton(digit: "3",yOffset: 150,xOffset: 100)
+        addChannelButton(digit: "4",yOffset: 200,xOffset: 0)
+        addChannelButton(digit: "5",yOffset: 200,xOffset: 50)
+        addChannelButton(digit: "6",yOffset: 200,xOffset: 100)
+        addChannelButton(digit: "7",yOffset: 250,xOffset: 0)
+        addChannelButton(digit: "8",yOffset: 250,xOffset: 50)
+        addChannelButton(digit: "9",yOffset: 250,xOffset: 100)
+        
+        addIncrementButton(yOffset: 200, xOffset: -50)
+        addDecrementButton(yOffset: 250, xOffset: -50)
+        
+        addFavoriteChannelSegment()
+    }
+    
+    func addFavoriteChannelSegment(){
+        let segment = self.segment
+        segment.frame = CGRect(x: 0, y: 0, width: 250, height: 100)
+        self.view.addSubview(segment)
+        let action = getSegmentChangeAction(segment: segment)
+        segment.addAction(action, for: .valueChanged)
+        
+        segment.translatesAutoresizingMaskIntoConstraints = false
+        segment.topAnchor.constraint(equalTo: view.topAnchor,constant: 315).isActive = true
+        segment.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 20).isActive = true
+        
+        
+        elements.append(segment)
+    }
+    
+    func addPowerButton() {
+        let toggle = UISwitch(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
+        let toggleChangedAction = getToggleChangeAction(toggle: toggle)
+        toggle.isOn = true
+        toggle.addAction(toggleChangedAction, for: .valueChanged)
+        
+        self.view.addSubview(toggle)
+        
+        toggle.translatesAutoresizingMaskIntoConstraints = false
+        toggle.topAnchor.constraint(equalTo: view.topAnchor,constant: 50).isActive = true
+        toggle.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0).isActive = true
+        
     }
 
-    func getButtonNumberPressAction(val: String, label: UILabel) -> UIAction {
+    func addChannelButton(digit: String,yOffset: CGFloat, xOffset: CGFloat) {
+        let btn = addButton(label: digit)
+
+        let addPressAction = getButtonNumberPressAction(val:digit)
+        btn.addAction(addPressAction, for: UIControl.Event.touchDown)
+        self.view.addSubview(btn)
+        
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.topAnchor.constraint(equalTo: view.topAnchor,constant: yOffset).isActive = true
+        btn.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: xOffset).isActive = true
+
+        elements.append(btn)
+        
+    }
+    
+    func addIncrementButton(yOffset: CGFloat, xOffset: CGFloat) {
+        let btn = addButton(label: "Ch +")
+
+        let action = getIncrementChannelAction()
+        btn.addAction(action, for: UIControl.Event.touchDown)
+        self.view.addSubview(btn)
+        
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.topAnchor.constraint(equalTo: view.topAnchor,constant: yOffset).isActive = true
+        btn.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: xOffset).isActive = true
+
+        elements.append(btn)
+        
+    }
+    
+    func addDecrementButton(yOffset: CGFloat, xOffset: CGFloat) {
+        let btn = addButton(label: "Ch -")
+
+        let action = getDecrementChannelAction()
+        btn.addAction(action, for: UIControl.Event.touchDown)
+        self.view.addSubview(btn)
+        
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.topAnchor.constraint(equalTo: view.topAnchor,constant: yOffset).isActive = true
+        btn.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: xOffset).isActive = true
+
+        elements.append(btn)
+        
+    }
+    
+    func addSlider() {
+        let slider = UISlider(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
+        slider.minimumValue = 0
+        slider.maximumValue = 100
+        let sliderChangedAction = getSliderValChangeAction(slider: slider)
+        slider.addAction(sliderChangedAction, for: .valueChanged)
+        slider.value = 50
+        self.view.addSubview(slider)
+        
+        slider.translatesAutoresizingMaskIntoConstraints = false
+        slider.topAnchor.constraint(equalTo: view.topAnchor,constant: 105).isActive = true
+        slider.leftAnchor.constraint(equalTo: view.centerXAnchor, constant: -60).isActive = true
+        slider.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -50).isActive = true
+        
+        elements.append(slider)
+        
+    }
+    
+    func addButton(label: String) -> UIButton {
+        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 50, height: 50));
+        button.setTitle(label, for: UIControl.State.normal)
+        button.setTitleColor(CORNFLOWER_BLUE, for: UIControl.State.normal)
+        button.setTitleColor(.gray, for: UIControl.State.disabled)
+        
+        return button;
+    }
+    
+    func getButtonNumberPressAction(val: String) -> UIAction {
         
         let numberPressAction = UIAction() { (action) in
             
@@ -72,6 +205,7 @@ class RemoteViewController: UIViewController {
                 let newChannelString = self.firstDigit + val
                 let newChannelInt = Int(newChannelString)
                 self.firstDigit = ""
+                self.segment.selectedSegmentIndex = -1
                 self.channelSetAction(newChannelInt ?? 00)
             }            
         }
@@ -79,34 +213,64 @@ class RemoteViewController: UIViewController {
         return numberPressAction
     }
     
-    func getIncrementChannelAction(val: String, label: UILabel) -> UIAction {
+    func getToggleChangeAction(toggle: UISwitch) -> UIAction {
         
-        let numberPressAction = UIAction() { (action) in
+        let toggleChangedAction = UIAction() { (action) in
             
+            self.powerSwitchedAction(toggle.isOn)
             
-            /*if(val == "=") {
-                self.compute(label: label)
+            for element in self.elements {
+                
+                element.isEnabled = toggle.isOn
+        
             }
-            else {
-                self.storeInputAndUpdateDisplay(val: Character(val),label: label)
-            }*/
         }
                 
-        return numberPressAction
+        return toggleChangedAction
+        
     }
     
-    func getDecrementChannelAction(val: String, label: UILabel) -> UIAction {
-        
-        let numberPressAction = UIAction() { (action) in
-            /*if(val == "=") {
-                self.compute(label: label)
-            }
-            else {
-                self.storeInputAndUpdateDisplay(val: Character(val),label: label)
-            }*/
+    func getSliderValChangeAction(slider: UISlider) -> UIAction {
+                
+        let sliderChangedAction = UIAction() { (action) in
+            
+            self.volumeSetAction(Int(slider.value))
         }
                 
-        return numberPressAction
+        return sliderChangedAction
+        
+    }
+    
+    func getIncrementChannelAction() -> UIAction {
+        
+        let action = UIAction() { (action) in
+            
+            self.segment.selectedSegmentIndex = -1
+            self.channelIncrementAction()
+        }
+                
+        return action
+    }
+    
+    func getDecrementChannelAction() -> UIAction {
+        
+        let action = UIAction() { (action) in
+            self.segment.selectedSegmentIndex = -1
+            self.channelDecrementAction()
+        }
+                
+        return action
+    }
+    
+    func getSegmentChangeAction(segment: UISegmentedControl) -> UIAction {
+                
+        let action = UIAction() { (action) in
+            
+            self.channelSetAction(segment.selectedSegmentIndex + 1)
+        }
+                
+        return action
+        
     }
     
     public func setChannelSetObserver(callback:  @escaping (Int) -> Void) {
@@ -134,7 +298,7 @@ class RemoteViewController: UIViewController {
         label.textColor = color;
         label.font = UIFont(name: "Chalkboard SE",size: size)
         label.text = text;
-        label.numberOfLines = 1;
+        label.numberOfLines = 2;
         label.textAlignment = .left
 
     }

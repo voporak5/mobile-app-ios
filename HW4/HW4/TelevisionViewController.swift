@@ -21,6 +21,8 @@ class TelevisionViewController: UIViewController {
     let channelLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 50))
     let channelStatusLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 50))
     
+    var channel = 7
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -92,17 +94,27 @@ class TelevisionViewController: UIViewController {
     }
     
     public func SetChannel(channel:Int){
+        if channel == 0 {
+            return
+        }
+        
+        self.channel = channel
         channelStatusLabel.text = String(channel)
     }
     
     public func IncrementChannel(){
-        
-        /*var channel : Int = Int(channelStatusLabel.text ?? "-1")
-        channel = ((channel ?? 0) + 1) % 100
-        channelStatusLabel.text = String(channel)*/
+        self.channel = (self.channel + 1) % 100
+        if self.channel == 0 {
+            self.channel += 1
+        }
+        channelStatusLabel.text = String(self.channel)
     }
     
     public func DecrementChannel(){
-        
+        self.channel -= 1
+        if self.channel <= 0 {
+            self.channel = 99
+        }
+        channelStatusLabel.text = String(self.channel)
     }
 }

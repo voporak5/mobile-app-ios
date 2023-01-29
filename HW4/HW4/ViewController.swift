@@ -74,11 +74,11 @@ class ViewController: UIViewController {
     }
     
     func onChannelIncrement(){
-        tvViewController
+        tvViewController.IncrementChannel()
     }
     
     func onChannelDecrement(){
-        
+        tvViewController.DecrementChannel()
     }
 }
 
