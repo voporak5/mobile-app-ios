@@ -10,16 +10,15 @@ import UIKit
 class TelevisionViewController: UIViewController {
 
     let CORNFLOWER_BLUE     =   UIColor(red: 100/255,green: 149/255,blue: 237/255,alpha:1);
+    let WHITE               =   UIColor(red: 255/255,green: 255/255,blue: 255/255,alpha:1);
     
-    let WHITE     =   UIColor(red: 255/255,green: 255/255,blue: 255/255,alpha:1);
-    
-    let tvLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 50))
-    let powerLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 50))
-    let powerStatusLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 50))
-    let speakerLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 50))
-    let speakerStatusLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 50))
-    let channelLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 50))
-    let channelStatusLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 50))
+    let tvLabel             =   UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 50))
+    let powerLabel          =   UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 50))
+    let powerStatusLabel    =   UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 50))
+    let speakerLabel        =   UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 50))
+    let speakerStatusLabel  =   UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 50))
+    let channelLabel        =   UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 50))
+    let channelStatusLabel  =   UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 50))
     
     var channel = 7
     
@@ -94,6 +93,7 @@ class TelevisionViewController: UIViewController {
     }
     
     public func SetChannel(channel:Int){
+        //Channel 0 is not a real channel so don't do anything
         if channel == 0 {
             return
         }

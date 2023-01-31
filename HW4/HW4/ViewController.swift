@@ -18,16 +18,20 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         self.view.backgroundColor = BLACK;
         
+        //Create the TV
         addChild(tvViewController)
         self.view.addSubview(tvViewController.view);
         tvViewController.didMove(toParent: self)
         setTVConstraints()
         
+        //Create the Remote
         addChild(remoteViewController)
         self.view.addSubview(remoteViewController.view);
         remoteViewController.didMove(toParent: self)
         setRemoteConstraints()
         
+        //Setup listeners that send messages to the TV because
+        //the TV and Remote don't know about each other
         remoteViewController.setChannelSetObserver(callback: onChannelSet)
         remoteViewController.setVolumeSetObserver(callback: onVolumeSet)
         remoteViewController.setIncrementObserver(callback: onChannelIncrement)
