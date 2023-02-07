@@ -33,6 +33,9 @@ class ViewController: UIViewController,UITextFieldDelegate {
         setupButtonsStackView()
         setupInputsStackView()
         setupListStackView()
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
+        view.addGestureRecognizer(tap)
     }
     
     func setupHeader(){
@@ -175,6 +178,7 @@ class ViewController: UIViewController,UITextFieldDelegate {
             }
             
             self.items.removeAll()
+            self.clearFields()
         }
                 
         return action
@@ -182,8 +186,7 @@ class ViewController: UIViewController,UITextFieldDelegate {
     
     func newItemAction() -> UIAction {
         let action = UIAction() { (action) in
-            self.descriptionText.text = "";
-            self.quantityText.text = "";
+            self.clearFields();
         }
                 
         return action
@@ -194,19 +197,40 @@ class ViewController: UIViewController,UITextFieldDelegate {
         let action = UIAction() { (action) in
             
             if(self.descriptionText.text == "" ) {
+                self.showAlert(msg: "Description Is Empty!")
                 return
             }
             
             if(self.quantityText.text == "") {
+                self.showAlert(msg: "Quantity Is Empty!")
                 return
             }
             
             self.addItem(name: self.descriptionText.text ?? "null", quantity: Int(self.quantityText.text ?? "0") ?? 0)
+            self.clearFields();
         }
                 
         return action
         
         
+    }
+    
+    func showAlert(msg: String) {
+        var dialogMessage = UIAlertController(title: "Error", message: msg, preferredStyle: .alert)
+        let ok = UIAlertAction(title: "OK", style: .default)
+        
+        dialogMessage.addAction(ok)
+        
+        self.present(dialogMessage, animated: true, completion: nil)
+    }
+    
+    func clearFields() {
+        self.descriptionText.text = "";
+        self.quantityText.text = "";
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
     }
 
 }
