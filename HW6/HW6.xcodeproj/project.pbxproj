@@ -16,12 +16,12 @@
 		C037BED6299B0E8100E1BF32 /* HW6Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C037BED5299B0E8100E1BF32 /* HW6Tests.swift */; };
 		C037BEE0299B0E8100E1BF32 /* HW6UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C037BEDF299B0E8100E1BF32 /* HW6UITests.swift */; };
 		C037BEE2299B0E8100E1BF32 /* HW6UITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C037BEE1299B0E8100E1BF32 /* HW6UITestsLaunchTests.swift */; };
-		C037BEF0299B0EAA00E1BF32 /* TelevisionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C037BEEE299B0EAA00E1BF32 /* TelevisionViewController.swift */; };
-		C037BEF1299B0EAA00E1BF32 /* RemoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C037BEEF299B0EAA00E1BF32 /* RemoteViewController.swift */; };
 		C037BEF3299B0F1600E1BF32 /* DVRViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C037BEF2299B0F1600E1BF32 /* DVRViewController.swift */; };
 		C037BEF5299B10EB00E1BF32 /* DVRRemoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C037BEF4299B10EB00E1BF32 /* DVRRemoteViewController.swift */; };
 		C037BEF7299B112100E1BF32 /* DVRDisplayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C037BEF6299B112100E1BF32 /* DVRDisplayViewController.swift */; };
 		C037BEF9299B164400E1BF32 /* FooterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C037BEF8299B164400E1BF32 /* FooterViewController.swift */; };
+		C0602F5829A294B5003050A7 /* RemoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0602F5729A294B5003050A7 /* RemoteViewController.swift */; };
+		C0602F5A29A294D6003050A7 /* TelevisionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0602F5929A294D6003050A7 /* TelevisionViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,12 +55,12 @@
 		C037BEDB299B0E8100E1BF32 /* HW6UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HW6UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C037BEDF299B0E8100E1BF32 /* HW6UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HW6UITests.swift; sourceTree = "<group>"; };
 		C037BEE1299B0E8100E1BF32 /* HW6UITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HW6UITestsLaunchTests.swift; sourceTree = "<group>"; };
-		C037BEEE299B0EAA00E1BF32 /* TelevisionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TelevisionViewController.swift; path = ../../HW4/HW4/TelevisionViewController.swift; sourceTree = "<group>"; };
-		C037BEEF299B0EAA00E1BF32 /* RemoteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RemoteViewController.swift; path = ../../HW4/HW4/RemoteViewController.swift; sourceTree = "<group>"; };
 		C037BEF2299B0F1600E1BF32 /* DVRViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DVRViewController.swift; sourceTree = "<group>"; };
 		C037BEF4299B10EB00E1BF32 /* DVRRemoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DVRRemoteViewController.swift; sourceTree = "<group>"; };
 		C037BEF6299B112100E1BF32 /* DVRDisplayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DVRDisplayViewController.swift; sourceTree = "<group>"; };
 		C037BEF8299B164400E1BF32 /* FooterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterViewController.swift; sourceTree = "<group>"; };
+		C0602F5729A294B5003050A7 /* RemoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteViewController.swift; sourceTree = "<group>"; };
+		C0602F5929A294D6003050A7 /* TelevisionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelevisionViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,8 +111,6 @@
 		C037BEBD299B0E8000E1BF32 /* HW6 */ = {
 			isa = PBXGroup;
 			children = (
-				C037BEEF299B0EAA00E1BF32 /* RemoteViewController.swift */,
-				C037BEEE299B0EAA00E1BF32 /* TelevisionViewController.swift */,
 				C037BEBE299B0E8000E1BF32 /* AppDelegate.swift */,
 				C037BEC0299B0E8000E1BF32 /* SceneDelegate.swift */,
 				C037BEC2299B0E8000E1BF32 /* ViewController.swift */,
@@ -124,6 +122,8 @@
 				C037BEF4299B10EB00E1BF32 /* DVRRemoteViewController.swift */,
 				C037BEF6299B112100E1BF32 /* DVRDisplayViewController.swift */,
 				C037BEF8299B164400E1BF32 /* FooterViewController.swift */,
+				C0602F5729A294B5003050A7 /* RemoteViewController.swift */,
+				C0602F5929A294D6003050A7 /* TelevisionViewController.swift */,
 			);
 			path = HW6;
 			sourceTree = "<group>";
@@ -277,13 +277,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				C037BEF5299B10EB00E1BF32 /* DVRRemoteViewController.swift in Sources */,
+				C0602F5829A294B5003050A7 /* RemoteViewController.swift in Sources */,
 				C037BEC3299B0E8000E1BF32 /* ViewController.swift in Sources */,
+				C0602F5A29A294D6003050A7 /* TelevisionViewController.swift in Sources */,
 				C037BEF7299B112100E1BF32 /* DVRDisplayViewController.swift in Sources */,
 				C037BEF3299B0F1600E1BF32 /* DVRViewController.swift in Sources */,
-				C037BEF1299B0EAA00E1BF32 /* RemoteViewController.swift in Sources */,
 				C037BEF9299B164400E1BF32 /* FooterViewController.swift in Sources */,
 				C037BEBF299B0E8000E1BF32 /* AppDelegate.swift in Sources */,
-				C037BEF0299B0EAA00E1BF32 /* TelevisionViewController.swift in Sources */,
 				C037BEC1299B0E8000E1BF32 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
