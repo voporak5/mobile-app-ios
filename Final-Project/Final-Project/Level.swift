@@ -9,4 +9,6 @@
 struct Level {
     let image:String?
     let title:String?
+    let song:String?
+    let lyrics: [Lyric]?
 }

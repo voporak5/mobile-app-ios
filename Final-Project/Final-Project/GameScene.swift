@@ -7,64 +7,105 @@
 
 import SpriteKit
 import GameplayKit
+import AVFoundation
 
 class GameScene: SKScene {
     
-    private var label : SKLabelNode?
-    private var spinnyNode : SKShapeNode?
+    
+    var audioPlayer = AVAudioPlayer()
+    var isPlaying = false
+    var gamePaused = false;
+    var index = 0
+    var currentLevel: Level?
+    var words: [SKLabelNode] = []
+    var previousTime: Double = 0
+    
+    
+    
+    private var player : SKSpriteNode?
+    
+    var levelCompleteAction: () -> ()    =   { print("Level Complete") }
+    
+    override func sceneDidLoad() {
+        super.sceneDidLoad()
+        
+        
+    }
+    
+    public func loadLevel(level:Level){
+        currentLevel = level
+        let sound = Bundle.main.path(forResource: level.song, ofType: "mp3")
+        
+        do{
+            audioPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: sound!))
+            audioPlayer.play()
+            //audioPlayer.currentTime
+        }
+        catch{
+            print(error)
+        }
+        
+        isPlaying = true
+        gamePaused = false
+        index = 0
+    }
+    
+    
     
     override func didMove(to view: SKView) {
         
-        // Get label node from scene and store it for use later
-        self.label = self.childNode(withName: "//helloLabel") as? SKLabelNode
-        if let label = self.label {
-            label.alpha = 0.0
-            label.run(SKAction.fadeIn(withDuration: 2.0))
+        self.backgroundColor = UIColor(red:1,green: 0,blue: 0,alpha: 1)
+        self.player = SKSpriteNode(imageNamed: "player")
+        print(self.size)
+        if let player = self.player {
+            print(self.size.width)
+            //let offset = self.size.height/(-2) + 100 + 50
+            player.position = CGPoint(x: 0.5, y: 0.15)
+            player.size = CGSize(width: 200.0, height: 200.0)
+            player.setScale(0.001)
+            player.physicsBody = SKPhysicsBody(rectangleOf: player.size)
+            //player.physicsBody?.categoryBitMask = PHYSICS_LAYER_1
+            //player.physicsBody?.collisionBitMask = PHYSICS_LAYER_1
+            player.physicsBody?.affectedByGravity = false;
+            //player.physicsBody?.contactTestBitMask = PHYSICS_LAYER_1
+            self.addChild(player)
         }
-        
-        // Create shape node to use during mouse interaction
-        let w = (self.size.width + self.size.height) * 0.05
-        self.spinnyNode = SKShapeNode.init(rectOf: CGSize.init(width: w, height: w), cornerRadius: w * 0.3)
-        
-        if let spinnyNode = self.spinnyNode {
-            spinnyNode.lineWidth = 2.5
-            
-            spinnyNode.run(SKAction.repeatForever(SKAction.rotate(byAngle: CGFloat(Double.pi), duration: 1)))
-            spinnyNode.run(SKAction.sequence([SKAction.wait(forDuration: 0.5),
-                                              SKAction.fadeOut(withDuration: 0.5),
-                                              SKAction.removeFromParent()]))
-        }
+    
+    
+        //physicsWorld.contactDelegate = self
     }
     
     
     func touchDown(atPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.green
-            self.addChild(n)
+        
+        if(gamePaused){
+            return;
+        }
+        
+        if let player = self.player {
+            player.position.x = pos.x
         }
     }
     
     func touchMoved(toPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.blue
-            self.addChild(n)
+        
+        if(gamePaused){
+            return;
+        }
+        
+        if let player = self.player {
+            player.position.x = pos.x
         }
     }
     
     func touchUp(atPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.red
-            self.addChild(n)
-        }
+
+        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if let label = self.label {
-            label.run(SKAction.init(named: "Pulse")!, withKey: "fadeInOut")
-        }
+   
+        
         
         for t in touches { self.touchDown(atPoint: t.location(in: self)) }
     }
@@ -83,6 +124,75 @@ class GameScene: SKScene {
     
     
     override func update(_ currentTime: TimeInterval) {
+    
+        let deltaTime = currentTime - previousTime
+        previousTime = currentTime
+
+        if(gamePaused){
+            return;
+        }
+        
+        for label in words {
+            
+            label.position = CGPointMake(label.position.x, label.position.y - (deltaTime * 0.5))
+            if(label.position.y < player?.position.y ?? 0){
+                label.alpha = 0;
+            }
+        }
+        
         // Called before each frame is rendered
+        if(audioPlayer.isPlaying == false || audioPlayer.currentTime >= audioPlayer.duration) {
+            if(isPlaying) {
+                self.words = []
+                levelCompleteAction()
+            }
+            
+            return
+        }
+        
+        if(index >= currentLevel?.lyrics?.count ?? -1) {
+            return
+        }
+        
+        if(audioPlayer.currentTime + 2 >= currentLevel?.lyrics?[index].time ?? 999999999999){
+            addLyric()
+        }
+        
+    }
+    
+    public func setLevelCompleteObserver(callback:  @escaping () -> Void) {
+        self.levelCompleteAction = callback;
+    }
+    
+    public func resume() {
+        self.audioPlayer.play()
+        self.gamePaused = false
+    }
+    
+    public func pause() {
+        self.gamePaused = true
+        self.audioPlayer.pause()
+    }
+    
+    public func end(){
+        self.words = []
+        levelCompleteAction()
+    }
+    
+    func addLyric() {
+        
+        let myLabel = SKLabelNode(fontNamed:"Chalkduster")
+        // Add them into same scene
+        self.addChild(myLabel)
+        
+        myLabel.text = currentLevel?.lyrics?[index].text;
+        myLabel.fontSize = 35
+        myLabel.position = CGPointMake(0.5, 1.0)
+        myLabel.fontColor = .white
+        myLabel.setScale(0.001)
+        
+        words.append(myLabel)
+        
+        index += 1
     }
 }
