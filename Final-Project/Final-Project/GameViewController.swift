@@ -11,9 +11,11 @@ import GameplayKit
 
 class GameViewController: UIViewController {
 
-    var mainMenuViewController = MainMenuViewController()
-    var guiController = GUIViewController()
-    var pausedViewController = PausedViewController()
+    var mainMenuViewController  = MainMenuViewController()
+    var guiController           = GUIViewController()
+    var pausedViewController    = PausedViewController()
+    var gameOverViewController  = GameOverViewController()
+    
     var game : GameScene?
     
     override func viewDidLoad() {
@@ -28,18 +30,24 @@ class GameViewController: UIViewController {
             view.ignoresSiblingOrder = true
             view.showsFPS = true
             view.showsNodeCount = true
+            //view.showsPhysics = true
+            
         }
         
         addChild(mainMenuViewController)
         self.view.addSubview(mainMenuViewController.view);
         mainMenuViewController.didMove(toParent: self)
         mainMenuViewController.setLevelSelectObserver(callback: onLevelSelect)
+        mainMenuViewController.setVolumeSetObserver(callback: onVolumeChanged)
         
         game?.setLevelCompleteObserver(callback: onLevelComplete)
+        game?.setStarsEarnedObserver(callback: onStarEarned)
         
         guiController.setPauseObserver(callback: onPause)
         pausedViewController.setResumeObserver(callback: onResume)
         pausedViewController.setQuitObserver(callback: onQuit)
+        
+        gameOverViewController.setContinueObserver(callback: onGameOverContinue)
     }
 
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
@@ -59,18 +67,30 @@ class GameViewController: UIViewController {
         mainMenuViewController.removeFromParent()
         mainMenuViewController.view.removeFromSuperview()
         
+        
         addChild(guiController)
         self.view.addSubview(guiController.view);
         guiController.didMove(toParent: self)
+        
+        guiController.setStars(starsEarned: 0)
     }
     
-    func onLevelComplete(){
-        addChild(mainMenuViewController)
-        self.view.addSubview(mainMenuViewController.view);
-        mainMenuViewController.didMove(toParent: self)
+    func onVolumeChanged(volume:Float){
+        game?.setVolume(volume: volume)
+    }
+    
+    func onLevelComplete(level:Level,score:Int,stars:Int){
+        
+        addChild(gameOverViewController)
+        self.view.addSubview(gameOverViewController.view);
+        gameOverViewController.didMove(toParent: self)
+        gameOverViewController.setConstraints()
+        
+        gameOverViewController.set(title: level.title ?? "",score:score,starsEarned: stars)
         
         guiController.removeFromParent()
         guiController.view.removeFromSuperview()
+        
     }
     
     func onPause(){
@@ -79,12 +99,21 @@ class GameViewController: UIViewController {
         addChild(pausedViewController)
         self.view.addSubview(pausedViewController.view);
         pausedViewController.didMove(toParent: self)
+        pausedViewController.setConstraints()
+        
+        
+        guiController.removeFromParent()
+        guiController.view.removeFromSuperview()
     }
     
     func onResume(){
         game?.resume()
         pausedViewController.removeFromParent()
         pausedViewController.view.removeFromSuperview()
+        
+        addChild(guiController)
+        self.view.addSubview(guiController.view);
+        guiController.didMove(toParent: self)
     }
     
     func onQuit(){
@@ -92,4 +121,19 @@ class GameViewController: UIViewController {
         pausedViewController.removeFromParent()
         pausedViewController.view.removeFromSuperview()
     }
+    
+    func onGameOverContinue(){
+        addChild(mainMenuViewController)
+        self.view.addSubview(mainMenuViewController.view);
+        mainMenuViewController.didMove(toParent: self)
+        
+        gameOverViewController.removeFromParent()
+        gameOverViewController.view.removeFromSuperview()
+    }
+    
+    func onStarEarned(stars:Int){
+        guiController.setStars(starsEarned: stars)
+    }
+    
+    
 }

@@ -11,6 +11,7 @@ class MainMenuViewController: UIViewController, UITableViewDelegate, UITableView
 
     var levelArr: [Level] = []
     var creditsViewController = CreditsViewController()
+    var settingsViewController = SettingsViewController()
     
     var myTableView: UITableView!
     
@@ -1278,7 +1279,7 @@ class MainMenuViewController: UIViewController, UITableViewDelegate, UITableView
         let settingsBtn = addButton(label: "Settings")
 
         settingsBtn.addAction(UIAction() { (action) in
-            self.present(self.creditsViewController,animated:true,completion:nil)
+            self.present(self.settingsViewController,animated:true,completion:nil)
         }, for: UIControl.Event.touchDown)
         self.view.addSubview(settingsBtn)
         
@@ -1314,7 +1315,11 @@ class MainMenuViewController: UIViewController, UITableViewDelegate, UITableView
     public func setLevelSelectObserver(callback:  @escaping (Level) -> Void) {
         self.levelSelectAction = callback;
     }
-
+    
+    public func setVolumeSetObserver(callback:  @escaping (Float) -> Void) {
+        self.settingsViewController.setVolumeSetObserver(callback: callback);
+    }
+    
     func addButton(label: String) -> UIButton {
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: 50, height: 50));
         button.setTitle(label, for: UIControl.State.normal)

@@ -29,6 +29,7 @@
 		C074C30229B55159003B0AAE /* Lyric.swift in Sources */ = {isa = PBXBuildFile; fileRef = C074C30129B55159003B0AAE /* Lyric.swift */; };
 		C074C30429B58A2E003B0AAE /* GUIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C074C30329B58A2E003B0AAE /* GUIViewController.swift */; };
 		C074C30629B58A3D003B0AAE /* PausedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C074C30529B58A3D003B0AAE /* PausedViewController.swift */; };
+		C074C30829B6C629003B0AAE /* GameOverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C074C30729B6C629003B0AAE /* GameOverViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +75,7 @@
 		C074C30129B55159003B0AAE /* Lyric.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lyric.swift; sourceTree = "<group>"; };
 		C074C30329B58A2E003B0AAE /* GUIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GUIViewController.swift; sourceTree = "<group>"; };
 		C074C30529B58A3D003B0AAE /* PausedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PausedViewController.swift; sourceTree = "<group>"; };
+		C074C30729B6C629003B0AAE /* GameOverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOverViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,6 +143,7 @@
 				C074C30129B55159003B0AAE /* Lyric.swift */,
 				C074C30329B58A2E003B0AAE /* GUIViewController.swift */,
 				C074C30529B58A3D003B0AAE /* PausedViewController.swift */,
+				C074C30729B6C629003B0AAE /* GameOverViewController.swift */,
 			);
 			path = "Final-Project";
 			sourceTree = "<group>";
@@ -316,6 +319,7 @@
 				C045A95C29AEF1BE00639EB4 /* Level.swift in Sources */,
 				C074C30629B58A3D003B0AAE /* PausedViewController.swift in Sources */,
 				C045A95829AD967300639EB4 /* SettingsViewController.swift in Sources */,
+				C074C30829B6C629003B0AAE /* GameOverViewController.swift in Sources */,
 				C045A92329AD926E00639EB4 /* GameScene.swift in Sources */,
 				C045A92529AD926E00639EB4 /* GameViewController.swift in Sources */,
 				C045A91D29AD926D00639EB4 /* AppDelegate.swift in Sources */,
