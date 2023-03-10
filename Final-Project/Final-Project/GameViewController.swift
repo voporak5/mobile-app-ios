@@ -18,6 +18,8 @@ class GameViewController: UIViewController {
     
     var game : GameScene?
     
+    var gyroEnabled = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -39,6 +41,7 @@ class GameViewController: UIViewController {
         mainMenuViewController.didMove(toParent: self)
         mainMenuViewController.setLevelSelectObserver(callback: onLevelSelect)
         mainMenuViewController.setVolumeSetObserver(callback: onVolumeChanged)
+        mainMenuViewController.setGyroEnabledChangedObserver(callback: onGyroEnabledChanged)
         
         game?.setLevelCompleteObserver(callback: onLevelComplete)
         game?.setStarsEarnedObserver(callback: onStarEarned)
@@ -63,7 +66,7 @@ class GameViewController: UIViewController {
     }
     
     func onLevelSelect(level: Level){
-        game?.loadLevel(level: level)
+        game?.loadLevel(level: level,enableGyro: gyroEnabled)
         mainMenuViewController.removeFromParent()
         mainMenuViewController.view.removeFromSuperview()
         
@@ -77,6 +80,10 @@ class GameViewController: UIViewController {
     
     func onVolumeChanged(volume:Float){
         game?.setVolume(volume: volume)
+    }
+    
+    func onGyroEnabledChanged(enabled:Bool){
+        gyroEnabled = enabled
     }
     
     func onLevelComplete(level:Level,score:Int,stars:Int){
@@ -127,11 +134,14 @@ class GameViewController: UIViewController {
         self.view.addSubview(mainMenuViewController.view);
         mainMenuViewController.didMove(toParent: self)
         
+        mainMenuViewController.refresh()
+        
         gameOverViewController.removeFromParent()
         gameOverViewController.view.removeFromSuperview()
     }
     
     func onStarEarned(stars:Int){
+        mainMenuViewController.setLevelStarsEarned(stars: stars)
         guiController.setStars(starsEarned: stars)
     }
     

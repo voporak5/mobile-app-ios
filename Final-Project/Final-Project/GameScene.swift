@@ -8,18 +8,22 @@
 import SpriteKit
 import GameplayKit
 import AVFoundation
+import CoreMotion
 
 class GameScene: SKScene {
     
+    let motionManager = CMMotionManager()
     
     var audioPlayer = AVAudioPlayer()
     var volume : Float = 1.0
     var isPlaying = false
     var gamePaused = false;
+    var gyroEnabled = false;
     var index = 0
     var currentLevel: Level?
     var words: [SKLabelNode] = []
     var previousTime: Double = 0
+    var deltaTime: Double = 0
     var lyricsCollected = 0
     var starsEarned = 0
     var totalLyrics = 0
@@ -33,9 +37,11 @@ class GameScene: SKScene {
         super.sceneDidLoad()
     }
     
-    public func loadLevel(level:Level){
+    public func loadLevel(level:Level,enableGyro:Bool){
         
         currentLevel = level
+        gyroEnabled = enableGyro
+        
         let sound = Bundle.main.path(forResource: level.song, ofType: "mp3")
         
         do{
@@ -55,6 +61,10 @@ class GameScene: SKScene {
             
             label.removeFromParent()
 
+        }
+        
+        if(gyroEnabled){
+            motionManager.startGyroUpdates()
         }
         
         isPlaying = true
@@ -87,6 +97,10 @@ class GameScene: SKScene {
             return;
         }
         
+        if(gyroEnabled){
+            return;
+        }
+        
         if let player = self.player {
             player.position.x = pos.x
         }
@@ -95,6 +109,10 @@ class GameScene: SKScene {
     func touchMoved(toPoint pos : CGPoint) {
         
         if(gamePaused){
+            return;
+        }
+        
+        if(gyroEnabled){
             return;
         }
         
@@ -109,9 +127,6 @@ class GameScene: SKScene {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-   
-        
-        
         for t in touches { self.touchDown(atPoint: t.location(in: self)) }
     }
     
@@ -130,7 +145,7 @@ class GameScene: SKScene {
     
     override func update(_ currentTime: TimeInterval) {
     
-        let deltaTime = currentTime - previousTime
+        deltaTime = currentTime - previousTime
         previousTime = currentTime
 
         if(isPlaying == false){
@@ -139,6 +154,10 @@ class GameScene: SKScene {
         
         if(gamePaused){
             return;
+        }
+        
+        if(gyroEnabled){
+            gyroMoveCharacter()
         }
         
         for label in words {
@@ -237,8 +256,26 @@ class GameScene: SKScene {
     
     public func end(){
         isPlaying = false
+        
+        if(gyroEnabled){
+            motionManager.stopGyroUpdates()
+        }
+        
         if let level = currentLevel {
             levelCompleteAction(level,lyricsCollected,starsEarned)
+        }
+    }
+    
+    func gyroMoveCharacter(){
+        if let data = motionManager.gyroData {
+            let z = data.rotationRate.z
+            
+            if(z > 0.15){
+                player?.position.x += 0.5 * deltaTime
+            }
+            else if(z < 0.15){
+                player?.position.x -= 0.5 * deltaTime
+            }
         }
     }
     

@@ -11,4 +11,5 @@ struct Level {
     let title:String?
     let song:String?
     let lyrics: [Lyric]?
+    var stars:Int = 0
 }

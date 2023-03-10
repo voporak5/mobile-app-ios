@@ -12,10 +12,11 @@ class SettingsViewController: UIViewController {
     let RED     =   UIColor(red: 100/255,green: 0/255,blue: 0/255,alpha:1);
     let WHITE               =   UIColor(red: 255/255,green: 255/255,blue: 255/255,alpha:1);
     
-    let titleLabel            =   UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 150))
-    //let creditsLabel          =   UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 50))
+    let titleLabel         =   UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 150))
+    let gyroLabel          =   UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 50))
     
     var volumeSetAction: (Float) -> ()        =   { (val:Float) in print("Volume Changed") }
+    var gyroEnabledChangedAction: (Bool) -> () = { (val:Bool) in print("Gyro Enabled Changed")}
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,11 +26,17 @@ class SettingsViewController: UIViewController {
         self.view.addSubview(titleLabel)
         self.setLabel(label:self.titleLabel,text:"Volume",color: WHITE,size: 20)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,constant: 50).isActive = true
+        titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,constant: 105).isActive = true
         titleLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 30).isActive = true
-        titleLabel.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -30).isActive = true
-
+        
+        self.view.addSubview(gyroLabel)
+        self.setLabel(label:self.gyroLabel,text:"Gyro",color: WHITE,size: 20)
+        gyroLabel.translatesAutoresizingMaskIntoConstraints = false
+        gyroLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,constant: 140).isActive = true
+        gyroLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 30).isActive = true        
+        
         addVolumeSlider()
+        addGyroToggle()
         
         let closeBtn = addButton(label: "Close")
 
@@ -72,9 +79,25 @@ class SettingsViewController: UIViewController {
         return action
         
     }
+    
+    func getGyroEnabledChangedAction(toggle: UISwitch) -> UIAction {
+        
+        let action = UIAction() { (action) in
+            
+            self.gyroEnabledChangedAction(toggle.isOn)
+            
+        }
+                
+        return action
+        
+    }
 
     public func setVolumeSetObserver(callback:  @escaping (Float) -> Void) {
         self.volumeSetAction = callback;
+    }
+    
+    public func setGyroEnabledChangedObserver(callback:  @escaping (Bool) -> Void) {
+        self.gyroEnabledChangedAction = callback;
     }
 
     func addVolumeSlider() {
@@ -92,5 +115,18 @@ class SettingsViewController: UIViewController {
         slider.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -50).isActive = true
     }
 
+    func addGyroToggle(){
+        let toggle = UISwitch(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
+        let action = getGyroEnabledChangedAction(toggle: toggle)
+        toggle.isOn = false
+        toggle.addAction(action, for: .valueChanged)
+        
+        self.view.addSubview(toggle)
+        
+        toggle.translatesAutoresizingMaskIntoConstraints = false
+        toggle.centerYAnchor.constraint(equalTo: gyroLabel.centerYAnchor,constant: 0).isActive = true
+        toggle.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0).isActive = true
+    }
+    
 }
 

@@ -14,6 +14,7 @@ class MainMenuViewController: UIViewController, UITableViewDelegate, UITableView
     var settingsViewController = SettingsViewController()
     
     var myTableView: UITableView!
+    var currentLevelIndex = 0
     
     var levelSelectAction: (Level) -> ()    =   { (val:Level) in print("Level Changed") }
     
@@ -1302,6 +1303,7 @@ class MainMenuViewController: UIViewController, UITableViewDelegate, UITableView
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         //let cell = tableView.dequeueReusableCell(withIdentifier: "MyCell", for: indexPath as IndexPath)
         let cell = tableView.dequeueReusableCell(withIdentifier: "MyCell", for: indexPath) as! LevelViewCell
+        currentLevelIndex = indexPath.row
         cell.level = levelArr[indexPath.row]
         //cell.textLabel!.text = "\(levelArr[indexPath.row].name)"
         //cell.imag
@@ -1312,12 +1314,26 @@ class MainMenuViewController: UIViewController, UITableViewDelegate, UITableView
         return 100
     }
     
+    public func setLevelStarsEarned(stars:Int){
+        if(stars > levelArr[currentLevelIndex].stars){
+            levelArr[currentLevelIndex].stars = stars
+        }
+    }
+    
+    public func refresh(){
+        self.myTableView.reloadData()
+    }
+    
     public func setLevelSelectObserver(callback:  @escaping (Level) -> Void) {
         self.levelSelectAction = callback;
     }
     
     public func setVolumeSetObserver(callback:  @escaping (Float) -> Void) {
         self.settingsViewController.setVolumeSetObserver(callback: callback);
+    }
+    
+    public func setGyroEnabledChangedObserver(callback:  @escaping (Bool) -> Void) {
+        self.settingsViewController.setGyroEnabledChangedObserver(callback: callback)
     }
     
     func addButton(label: String) -> UIButton {

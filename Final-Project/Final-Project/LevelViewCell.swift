@@ -10,12 +10,31 @@ import Foundation
 
 class LevelViewCell:UITableViewCell{
     
-    let profileImageView:UIImageView = {
+    let albumImageView:UIImageView = {
              let img = UIImageView()
              img.contentMode = .scaleAspectFill // image will never be strecthed vertially or horizontally
              img.translatesAutoresizingMaskIntoConstraints = false // enable autolayout
-             //img.layer.cornerRadius = 35
-             //img.clipsToBounds = true
+            return img
+         }()
+    
+    let star1View:UIImageView = {
+             let img = UIImageView()
+             img.contentMode = .scaleAspectFill // image will never be strecthed vertially or horizontally
+             img.translatesAutoresizingMaskIntoConstraints = false // enable autolayout
+            return img
+         }()
+    
+    let star2View:UIImageView = {
+             let img = UIImageView()
+             img.contentMode = .scaleAspectFill // image will never be strecthed vertially or horizontally
+             img.translatesAutoresizingMaskIntoConstraints = false // enable autolayout
+            return img
+         }()
+    
+    let star3View:UIImageView = {
+             let img = UIImageView()
+             img.contentMode = .scaleAspectFill // image will never be strecthed vertially or horizontally
+             img.translatesAutoresizingMaskIntoConstraints = false // enable autolayout
             return img
          }()
     
@@ -41,38 +60,65 @@ class LevelViewCell:UITableViewCell{
             didSet {
                 guard let levelItem = level else {return}
                 if let image = levelItem.image {
-                    profileImageView.image = UIImage(named: image)
+                    albumImageView.image = UIImage(named: image)
                 }
                                 
                 if let title = levelItem.title {
                     nameLabel.text = "\(title)"
                 }
+                
+                if(levelItem.stars > 0){
+                    star1View.image = UIImage(named: "star-filled")
+                }
+                else {
+                    star1View.image = UIImage(named: "star-outline")
+                }
+                
+                if(levelItem.stars > 1){
+                    star2View.image = UIImage(named: "star-filled")
+                }
+                else {
+                    star2View.image = UIImage(named: "star-outline")
+                }
+                
+                if(levelItem.stars > 2){
+                    star3View.image = UIImage(named: "star-filled")
+                }
+                else {
+                    star3View.image = UIImage(named: "star-outline")
+                }                
             }
         }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        self.contentView.addSubview(profileImageView)
+        self.contentView.addSubview(albumImageView)
+        containerView.addSubview(star1View)
+        containerView.addSubview(star2View)
+        containerView.addSubview(star3View)
         containerView.addSubview(nameLabel)
         self.contentView.addSubview(containerView)
         
-        profileImageView.centerYAnchor.constraint(equalTo:self.contentView.centerYAnchor).isActive = true
-        profileImageView.leadingAnchor.constraint(equalTo:self.contentView.leadingAnchor, constant:10).isActive = true
-        profileImageView.widthAnchor.constraint(equalToConstant:70).isActive = true;
-        profileImageView.heightAnchor.constraint(equalToConstant:70).isActive = true
+        albumImageView.centerYAnchor.constraint(equalTo:self.contentView.centerYAnchor).isActive = true
+        albumImageView.leadingAnchor.constraint(equalTo:self.contentView.leadingAnchor, constant:10).isActive = true
+        albumImageView.widthAnchor.constraint(equalToConstant:70).isActive = true;
+        albumImageView.heightAnchor.constraint(equalToConstant:70).isActive = true
         
         nameLabel.topAnchor.constraint(equalTo:self.containerView.topAnchor,constant: 60).isActive = true
         nameLabel.leftAnchor.constraint(equalTo:self.containerView.leftAnchor,constant: 100).isActive = true
-        //nameLabel.trailingAnchor.constraint(equalTo:self.containerView.trailingAnchor).isActive = true
         
-        //nameLabel.centerXAnchor.constraint(equalTo:self.containerView.centerXAnchor).isActive = true
-        //nameLabel.centerYAnchor.constraint(equalTo:self.containerView.centerYAnchor).isActive = true
-        //nameLabel.trailingAnchor.constraint(equalTo:self.containerView.trailingAnchor).isActive = true
+        star1View.topAnchor.constraint(equalTo:self.containerView.topAnchor,constant: 0).isActive = true
+        star1View.rightAnchor.constraint(equalTo:self.containerView.rightAnchor,constant: 240).isActive = true
         
-        //jobTitleDetailedLabel.translatesAutoresizingMaskIntoConstraints = false
-        //jobTitleDetailedLabel.centerXAnchor.constraint(equalTo:containerView.centerXAnchor).isActive = true
-        //jobTitleDetailedLabel.centerYAnchor.constraint(equalTo:containerView.centerYAnchor).isActive = true
+        star2View.topAnchor.constraint(equalTo:self.containerView.topAnchor,constant: 0).isActive = true
+        star2View.rightAnchor.constraint(equalTo:self.containerView.rightAnchor,constant: 300).isActive = true
+        
+        star3View.topAnchor.constraint(equalTo:self.containerView.topAnchor,constant: 0).isActive = true
+        star3View.rightAnchor.constraint(equalTo:self.containerView.rightAnchor,constant: 360).isActive = true
+        
+        
+
      }
 
      required init?(coder aDecoder: NSCoder) {
