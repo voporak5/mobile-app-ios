@@ -71,6 +71,7 @@ class GameScene: SKScene {
         gamePaused = false
         index = 0
         lyricsCollected = 0
+        starsEarned = 0
         totalLyrics = currentLevel?.lyrics?.count ?? 0
         self.words = []
     }
