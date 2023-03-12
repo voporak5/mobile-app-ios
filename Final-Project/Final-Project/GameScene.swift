@@ -270,10 +270,10 @@ class GameScene: SKScene {
         if let data = motionManager.gyroData {
             let z = data.rotationRate.z
             
-            if(z > 0.15){
+            if(z > 0.15 && player?.position.x ?? 1 < 1){
                 player?.position.x += 0.5 * deltaTime
             }
-            else if(z < 0.15){
+            else if(z < 0.15 && player?.position.x ?? 0 > 0){
                 player?.position.x -= 0.5 * deltaTime
             }
         }
